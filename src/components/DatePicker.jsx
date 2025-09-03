@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-const DatePicker: React.FC<DatePickerProps> = ({
+const DatePicker = ({
   value,
   onChange,
   minDate,
   maxDate,
   disabled = false,
   className = '',
+  // Customization props
   containerClassName = '',
   headerClassName = '',
   navButtonClassName = '',
@@ -38,7 +39,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
     days.push(i);
   }
 
-  const isDateDisabled = (day: number | null): boolean => {
+  const isDateDisabled = (day) => {
     if (!day) return true;
     const date = new Date(currentYear, currentMonth, day);
     if (minDate && date < minDate) return true;
@@ -46,7 +47,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
     return false;
   };
 
-  const isSelected = (day: number | null): boolean => {
+  const isSelected = (day) => {
     if (!day) return false;
     return (
       value.getDate() === day &&
@@ -55,17 +56,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
     );
   };
 
-  const isToday = (day: number | null): boolean => {
-    if (!day) return false;
-    const today = new Date();
-    return (
-      today.getDate() === day &&
-      today.getMonth() === currentMonth &&
-      today.getFullYear() === currentYear
-    );
-  };
-
-  const handleDateClick = (day: number | null) => {
+  const handleDateClick = (day) => {
     if (!day || disabled || isDateDisabled(day)) return;
     const newDate = new Date(currentYear, currentMonth, day);
     onChange(newDate);
@@ -173,7 +164,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
     return `${base} ${themeClass} ${sizeClasses[size].navButton} ${navButtonClassName}`.trim();
   };
 
-  const getDayButtonClass = (isSelected: boolean, isToday: boolean, isDisabled: boolean) => {
+  const getDayButtonClass = (isSelected, isToday, isDisabled) => {
     const base = 'text-center rounded transition-colors disabled:cursor-not-allowed';
     let themeClass = themeClasses[theme].dayButton;
 
@@ -197,6 +188,15 @@ const DatePicker: React.FC<DatePickerProps> = ({
     return `${themeClass} ${sizeClasses[size].dayName} ${dayNameClassName}`.trim();
   };
 
+  const isToday = (day) => {
+    if (!day) return false;
+    const today = new Date();
+    return (
+      today.getDate() === day &&
+      today.getMonth() === currentMonth &&
+      today.getFullYear() === currentYear
+    );
+  };
 
   return (
     <div className={`${getContainerClass()} ${className}`}>
@@ -243,6 +243,25 @@ const DatePicker: React.FC<DatePickerProps> = ({
       </div>
     </div>
   );
+};
+
+DatePicker.propTypes = {
+  value: PropTypes.instanceOf(Date).isRequired,
+  onChange: PropTypes.func.isRequired,
+  minDate: PropTypes.instanceOf(Date),
+  maxDate: PropTypes.instanceOf(Date),
+  disabled: PropTypes.bool,
+  className: PropTypes.string,
+  containerClassName: PropTypes.string,
+  headerClassName: PropTypes.string,
+  navButtonClassName: PropTypes.string,
+  dayButtonClassName: PropTypes.string,
+  selectedDayClassName: PropTypes.string,
+  todayClassName: PropTypes.string,
+  disabledDayClassName: PropTypes.string,
+  dayNameClassName: PropTypes.string,
+  size: PropTypes.oneOf(['sm', 'md', 'lg']),
+  theme: PropTypes.oneOf(['light', 'dark', 'custom']),
 };
 
 export { DatePicker };

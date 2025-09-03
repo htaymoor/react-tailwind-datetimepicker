@@ -9,13 +9,35 @@ A lightweight, secure date-time picker component for React applications using Ta
 - Accessibility features (ARIA labels, keyboard navigation)
 - Customizable styling with TailwindCSS
 - No external dependencies (except React and TailwindCSS)
-- TypeScript support
+- **Universal Compatibility**: Works with both JSX and TSX applications
+- JSX with PropTypes for runtime type checking
+- TypeScript declaration files (.d.ts) for full TypeScript support
+- Extensive customization options for branding
+
+## Universal Compatibility
+
+This library is designed to work seamlessly with both JSX and TSX applications:
+
+### JSX Applications
+- Uses PropTypes for runtime type validation
+- No TypeScript setup required
+- Works out-of-the-box with Create React App (JSX)
+
+### TSX Applications
+- Includes TypeScript declaration files (.d.ts)
+- Full IntelliSense and type checking support
+- Compatible with Next.js, Vite, and other TypeScript setups
 
 ## Installation
 
 ```bash
 npm install react-tailwind-datetimepicker
 ```
+
+**Note:** This package supports both JSX and TSX applications! It includes:
+- JSX components with PropTypes for runtime type checking
+- TypeScript declaration files (.d.ts) for full TypeScript support
+- No additional setup required for either JSX or TSX projects
 
 ## Usage
 
@@ -51,12 +73,30 @@ function App() {
 
 ### Separate Components
 
-```tsx
+#### JSX Usage
+```jsx
 import { DatePicker, TimePicker } from 'react-tailwind-datetimepicker';
 
 function MyComponent() {
   const [date, setDate] = useState(new Date());
   const [time, setTime] = useState(new Date());
+
+  return (
+    <div>
+      <DatePicker value={date} onChange={setDate} />
+      <TimePicker value={time} onChange={setTime} timeFormat="24" />
+    </div>
+  );
+}
+```
+
+#### TSX Usage
+```tsx
+import { DatePicker, TimePicker } from 'react-tailwind-datetimepicker';
+
+function MyComponent() {
+  const [date, setDate] = useState<Date>(new Date());
+  const [time, setTime] = useState<Date>(new Date());
 
   return (
     <div>

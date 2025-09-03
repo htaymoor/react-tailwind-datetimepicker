@@ -1,13 +1,13 @@
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
-import typescript from '@rollup/plugin-typescript';
-import dts from 'rollup-plugin-dts';
+import babel from '@rollup/plugin-babel';
+import copy from 'rollup-plugin-copy';
 
 const packageJson = require('./package.json');
 
 export default [
   {
-    input: 'src/index.ts',
+    input: 'src/index.js',
     output: [
       {
         file: packageJson.main,
@@ -23,13 +23,17 @@ export default [
     plugins: [
       resolve(),
       commonjs(),
-      typescript({ tsconfig: './tsconfig.json' }),
+      babel({
+        presets: ['@babel/preset-env', '@babel/preset-react'],
+        babelHelpers: 'bundled',
+        exclude: 'node_modules/**',
+      }),
+      copy({
+        targets: [
+          { src: 'src/index.d.ts', dest: 'dist' }
+        ]
+      })
     ],
-    external: ['react', 'react-dom'],
-  },
-  {
-    input: 'dist/index.d.ts',
-    output: [{ file: 'dist/index.d.ts', format: 'esm' }],
-    plugins: [dts()],
+    external: ['react', 'react-dom', 'prop-types'],
   },
 ];
